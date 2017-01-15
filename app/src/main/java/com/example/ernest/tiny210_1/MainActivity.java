@@ -122,36 +122,41 @@ public class MainActivity extends AppCompatActivity {
                     //使用循环来读取获得的数据
 
                     while (true) {
-                        for (int i=0;i<59;i++) {
-                            unbuffer[i]=(byte)in.read();
-                        }
-                        for (int i = 0; i < 5; i++)
+                        while (in.read()!='-');
+                        if(in.read()=='-')
                         {
-                            str_length += (char)in.read();
-                        }
-                        System.out.println("长度为："+str_length);
-                        num_cnt=Integer.parseInt(str_length);
-                        str_length = "";
-                        for (int i = 0; i < 4; i++)
-                        {
-                            unbuffer[i] = (byte)in.read();
-                            //System.out.println(unbuffer[i]);
-                        }
-                        for (int i = 0; i < num_cnt; i++)
-                        {
-                            buffer[i] = (byte)in.read();
-                            //System.out.println(buffer[i]);
-                        }
-                        System.out.println("图片接收完毕");
-                        unbuffer[1] = (byte)in.read();
-                        unbuffer[1] = (byte)in.read();
+                            for (int i=0;i<57;i++) {
+                                unbuffer[i]=(byte)in.read();
+                            }
 
-                        bmp=byteArray2Bitmap(buffer,num_cnt+1);
-                        //img1.setImageBitmap(bmp);//设置图片
-                        Message msg = new Message();
-                        msg.obj = bmp;
-                        msg.what=1;
-                        updateBitmapHandler.sendMessage(msg);
+                            for (int i = 0; i < 5; i++)
+                            {
+                                str_length += (char)in.read();
+                            }
+                            //System.out.println("长度为："+str_length);
+                            num_cnt=Integer.parseInt(str_length);
+                            str_length = "";
+                            for (int i = 0; i < 4; i++)
+                            {
+                                unbuffer[i] = (byte)in.read();
+                                //System.out.println(unbuffer[i]);
+                            }
+                            for (int i = 0; i < num_cnt; i++)
+                            {
+                                buffer[i] = (byte)in.read();
+                                //System.out.println(buffer[i]);
+                            }
+                            //System.out.println("图片接收完毕");
+                            unbuffer[1] = (byte)in.read();
+                            unbuffer[1] = (byte)in.read();
+
+                            bmp=byteArray2Bitmap(buffer,num_cnt+1);
+                            //img1.setImageBitmap(bmp);//设置图片
+                            Message msg = new Message();
+                            msg.obj = bmp;
+                            msg.what=1;
+                            updateBitmapHandler.sendMessage(msg);
+                        }
                     }
 
 
